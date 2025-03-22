@@ -10,16 +10,28 @@ function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     axios.post("http://localhost:5000/login", { email, password })
       .then(result => {
-        console.log(result)
-        if(result.data === "Success") {
-            navigate('/home')
+        console.log(result); // Debug için
+        if (result.data.message === "admin") {
+          localStorage.setItem("isAdmin", "true"); // Admin olarak işaretle
+          navigate("/admin");
+        } else if (result.data.message === "user") {
+          localStorage.setItem("isAdmin", "false");
+          navigate("/home");
+        } else {
+          alert(result.data);
         }
       })
+      .catch((err) => {
+        console.error("Error during login:", err);
+        alert("An error occurred during login.");
+      });
   };
-
+  
+  
+  
   return (
     <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
       <div className="bg-white p-3 rounded w-25">
