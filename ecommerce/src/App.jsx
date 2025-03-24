@@ -1,24 +1,23 @@
-import { useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Signup from './pages/Signup'
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import Login from './pages/Login'
-import Home from './pages/Home'
-import Admin from './pages/Admin'
-import PrivateRoute from "./components/PrivateRoute";
+import { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Signup from './pages/Signup';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import AdminPage from './pages/Admin';
 
 function App() {
-
   return (
-   <BrowserRouter>
-    <Routes>
-      <Route path='/register' element={<Signup/>}></Route>
-      <Route path='/login' element={<Login/>}></Route>
-      <Route path='/home' element={<Home/>}></Route>
-      <Route path="/admin" element={<PrivateRoute element={<Admin />} />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/register' element={<Signup />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/home' element={<Home />} />
+        <Route path='/admin' element={<AdminPage />} />
+
       </Routes>
-   </BrowserRouter>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

@@ -13,21 +13,16 @@ function Login() {
     e.preventDefault();
     axios.post("http://localhost:5000/login", { email, password })
       .then(result => {
-        console.log(result); // Debug için
-        if (result.data.message === "admin") {
-          localStorage.setItem("isAdmin", "true"); // Admin olarak işaretle
-          navigate("/admin");
-        } else if (result.data.message === "user") {
-          localStorage.setItem("isAdmin", "false");
-          navigate("/home");
+        console.log(result);
+        if (email === "sena@sena.com" && password === "sena") {
+          localStorage.setItem("user", JSON.stringify({ email, role: "admin" }));
+          navigate("/admin"); // Admin paneline yönlendir
         } else {
-          alert(result.data);
+          localStorage.setItem("user", JSON.stringify({ email, role: "user" })); 
+          navigate("/home"); // Normal kullanıcı için yönlendirme
         }
-      })
-      .catch((err) => {
-        console.error("Error during login:", err);
-        alert("An error occurred during login.");
-      });
+      }) 
+      .catch(err => console.log(err));
   };
   
   
@@ -35,7 +30,7 @@ function Login() {
   return (
     <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
       <div className="bg-white p-3 rounded w-25">
-        <h2>Login</h2>
+        <h2  >Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email">

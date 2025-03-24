@@ -6,20 +6,32 @@ function Signup() {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [error, setError] = useState(""); // Hata mesajı için state
+
   const navigate = useNavigate();
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     axios
       .post("http://localhost:5000/register", { name, email, password })
-      .then((result) => console.log(result));
-    navigate("/login").catch((err) => console.log(err));
+      .then((result) => {
+        console.log(result);
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log("Registration Error:", err.response?.data?.message || err.message);
+        alert(err.response?.data?.message || "An error occurred");
+      });
   };
+  
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2>Register</h2>
+        {error && <p className="text-danger">{error}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="email">
