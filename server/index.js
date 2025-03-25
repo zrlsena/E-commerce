@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const CustomerModel = require("./models/Customer");
 const EmployeeModel = require("./models/Employee");
-
+const ProductModel = require("./models/Product");
 
 const app = express();
 app.use(express.json());
@@ -18,29 +18,47 @@ mongoose
   .then(() => console.log("✅ MongoDB connected successfully!"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-  app.post("/login", (req, res) => {
+  app.post("/login", async (req, res) => {
     const { email, password } = req.body;
-    
-    // Eğer admin bilgileri ile giriş yapılıyorsa
+
+    // Eğer admin giriş yapıyorsa
     if (email === "sena@sena.com" && password === "sena") {
-      return res.json({ message: "Admin Login Success", role: "admin" });
+        return res.json({ message: "Admin Login Success", role: "admin" });
     }
-  
-    // Normal kullanıcı girişi
-    CustomerModel.findOne({ email: email })
-      .then((user) => {
-        if (user) {
-          if (user.password === password) {
-            res.json({ message: "Success", role: "user" });
-          } else {
-            res.json("The password is incorrect");
-          }
-        } else {
-          res.json("No record existed");
+
+    try {
+        // Çalışan kontrolü
+        const employee = await EmployeeModel.findOne({ email: email });
+        if (employee) {
+            if (employee.password === password) {
+                return res.json({ 
+                    message: "Employee Login Success", 
+                    role: "employee",
+                    employeeId: employee._id  
+                });
+            } else {
+                return res.status(400).json({ message: "Incorrect password for employee" });
+            }
         }
-      });
-  });
-  
+
+        // Kullanıcı kontrolü
+        const user = await CustomerModel.findOne({ email: email });
+        if (user) {
+            if (user.password === password) {
+                return res.json({ message: "User Login Success", role: "user" });
+            } else {
+                return res.status(400).json({ message: "Incorrect password for user" });
+            }
+        }
+
+        return res.status(404).json({ message: "No user found" });
+
+    } catch (err) {
+        return res.status(500).json({ message: "Server error", error: err });
+    }
+});
+
+
 
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
@@ -102,6 +120,86 @@ app.delete("/admin/delete-employee/:id", async (req, res) => {
   try {
     await EmployeeModel.findByIdAndDelete(req.params.id);
     res.json({ message: "Employee deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+app.post("/employee/add-product", async (req, res) => {
+  const { name, description, price, stock, image, employeeId } = req.body;
+
+  if (!name || !description || !price || !stock || !image || !employeeId) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  try {
+    const newProduct = await ProductModel.create({ name, description, price, stock, image, employeeId });
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+
+// 🔥 Employee: Update a product
+app.put("/employee/update-product/:id", async (req, res) => {
+  const { name, description, price, stock, image } = req.body;
+
+  try {
+    const updatedProduct = await ProductModel.findByIdAndUpdate(
+      req.params.id,
+      { name, description, price, stock, image },
+      { new: true }
+    );
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+// 🔥 Employee: Delete a product
+app.delete("/employee/delete-product/:id", async (req, res) => {
+  try {
+    await ProductModel.findByIdAndDelete(req.params.id);
+    res.json({ message: "Product deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+// 🔥 Tüm ürünleri listeleme
+app.get("/products", async (req, res) => {
+  try {
+    const products = await ProductModel.find().populate("employeeId", "name email");
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+// 🔥 Employee: Update own profile information
+app.put("/employee/update-profile/:id", async (req, res) => {
+  const { description, image } = req.body;
+
+  try {
+    const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
+      req.params.id,
+      { description, image },
+      { new: true }
+    );
+    res.json(updatedEmployee);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+// 🔥 Fetch employee profile by ID
+app.get("/employee/:id", async (req, res) => {
+  try {
+    const employee = await EmployeeModel.findById(req.params.id);
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    res.json(employee);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }
