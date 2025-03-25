@@ -5,11 +5,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import AdminPage from './pages/Admin';
-import EmployeeDashboard from './pages/Employee';
 import Products from './pages/Products';
 import Artists from './pages/Artists';
 import NavBar from './components/Navbar';
 import EmployeeProfile from './pages/EmployeeProfile';
+import EmployeePage from './pages/Employee';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/home' element={<Home />} />
         <Route path='/admin' element={<AdminPage />} />
-        <Route path='/employee' element={<EmployeeDashboard />} />
+        <Route path='/employee' element={<EmployeePage />} />
         <Route path='/products' element={<Products />} />
         <Route path='/artists' element={<Artists />} />
         <Route path='/employee-profile' element={<EmployeeProfile />} />

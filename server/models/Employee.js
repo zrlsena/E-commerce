@@ -5,9 +5,9 @@ const EmployeeSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: { type: String, default: "employee" },
-  image: { type: String, required: false },
-  description: { type: String, required: true },
-
+  phone: { type: String },
+  description: { type: String, default: "" }, // Açıklama ekledik
+  image: { type: String, default: "" }, // Profil fotoğrafı için ekledik
 });
 
 const EmployeeModel = mongoose.model("Employee", EmployeeSchema);

@@ -90,7 +90,7 @@ const EmployeePage = () => {
               </Link>
       {/* Employee Name Display */}
       <div className="mb-4">
-        <h3>Welcome</h3>
+        <h3>Welcome </h3>
       </div>
 
       <h2 className="text-center mb-4">Manage Products</h2>

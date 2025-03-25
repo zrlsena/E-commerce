@@ -179,23 +179,32 @@ app.get("/products", async (req, res) => {
 
 // 🔥 Employee: Update own profile information
 app.put("/employee/update-profile/:id", async (req, res) => {
-  const { description, image } = req.body;
+  const {  name, email, phone, description, image } = req.body;
 
   try {
     const updatedEmployee = await EmployeeModel.findByIdAndUpdate(
       req.params.id,
-      { description, image },
+      {  name, email, phone, description, image },
       { new: true }
     );
+
+    if (!updatedEmployee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
     res.json(updatedEmployee);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }
 });
+
 // 🔥 Fetch employee profile by ID
 app.get("/employee/:id", async (req, res) => {
   try {
-    const employee = await EmployeeModel.findById(req.params.id);
+    const employee = await EmployeeModel.findById(req.params.id).select(
+      "name email role phone description image"
+    );
+
     if (!employee) {
       return res.status(404).json({ message: "Employee not found" });
     }
@@ -204,6 +213,7 @@ app.get("/employee/:id", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err });
   }
 });
+
 
 
 const PORT = process.env.PORT || 5000;
