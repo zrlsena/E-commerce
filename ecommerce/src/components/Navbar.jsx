@@ -1,49 +1,93 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, Button, Modal } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Container,
+  Button,
+  Modal,
+  Row,
+  Col,
+} from "react-bootstrap";
 
 const NavBar = () => {
   const [showCart, setShowCart] = useState(false);
-  const [userRole, setUserRole] = useState(null); // Kullanıcı rolünü tutacak state
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    // Kullanıcı rolü yoksa veya rol employee değilse yönlendir
     if (!storedUser || storedUser.role !== "employee") {
-      setUserRole("non-employee"); // "employee" değilse 'non-employee' olarak ayarla
+      setUserRole("non-employee");
     } else {
-      setUserRole("employee"); // Eğer employee rolündeyse rolü ayarla
+      setUserRole("employee");
     }
   }, []);
 
   return (
     <>
-      <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar
+        bg="light"
+        variant="light"
+        expand="lg"
+        style={{
+          paddingInline: "180px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          zIndex: 1000,
+          boxShadow: "0 0.4px 0.2px rgba(0, 0, 0, 0.2)",
+        }}
+      >
         <Container>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as={Link} to="/home">Home</Nav.Link>
-              <Nav.Link as={Link} to="/products">Products</Nav.Link>
-              <Nav.Link as={Link} to="/artists">Artists</Nav.Link>
-            </Nav>
-            
-            <Nav className="ms-auto">
+          <Row className="w-100 text-center align-items-center">
+            {/* 🎨 Sol Bölüm - MUSEGALLERY */}
+            <Col className="text-start">
+              <Navbar.Brand
+                as={Link}
+                to="/"
+                className="fw-bold fs-4"
+                style={{ fontFamily: "MyFont" }}
+              >
+                MUSEGALLERY
+              </Navbar.Brand>
+            </Col>
+
+            {/* 🔗 Orta Bölüm - Linkler */}
+            <Col>
+              <Nav
+                className="justify-content-center"
+                style={{ textTransform: "uppercase", fontSize: "12px" }}
+              >
+                <Nav.Link as={Link} to="/home" className="mx-3">
+                  Home
+                </Nav.Link>
+                <Nav.Link as={Link} to="/products" className="mx-3">
+                  Artworks
+                </Nav.Link>
+                <Nav.Link as={Link} to="/artists" className="mx-3">
+                  Artists
+                </Nav.Link>
+              </Nav>
+            </Col>
+
+            {/* 👤 Sağ Bölüm - Profil / Sepet */}
+            <Col className="text-end">
               {userRole === "employee" ? (
-                // Eğer kullanıcı 'employee' rolündeyse, profil butonunu göster
-                <Nav.Link as={Link} to="/employee-profile" className="text-white">
-                  👤 Profile
+                <Nav.Link as={Link} to="/employee-profile">
+                  👤
                 </Nav.Link>
               ) : (
-                // Eğer kullanıcı 'employee' değilse, sepet butonunu göster
-                <Button variant="outline-light" onClick={() => setShowCart(true)}>
-                  🛒 Cart
+                <Button
+                  variant="outline-light"
+                  onClick={() => setShowCart(true)}
+                >
+                  🛒
                 </Button>
               )}
-            </Nav>
-          </Navbar.Collapse>
+            </Col>
+          </Row>
         </Container>
       </Navbar>
 
@@ -54,7 +98,6 @@ const NavBar = () => {
         </Modal.Header>
         <Modal.Body>
           <p>Your cart is empty.</p>
-          {/* Buraya Sepet İçeriği Eklenebilir */}
         </Modal.Body>
       </Modal>
     </>

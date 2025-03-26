@@ -1,0 +1,17 @@
+.artist-card:hover img {
+    transform: scale(1.04); /* Make the image grow by 10% */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-transform: uppercase;
+    font-family: "MyFont", sans-serif;
+
+  }
+  @font-face {
+    font-family: "MyFont";
+    src: url("/fonts/Vogue.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  

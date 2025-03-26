@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import './a.css';
 
 const Artists = () => {
   const [employees, setEmployees] = useState([]);
@@ -21,8 +20,8 @@ const Artists = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px", paddingLeft:"180px", paddingRight:"180px" }}>
-      <h1 style={{ textAlign: "center", fontSize: "2rem", marginBottom: "20px", marginTop:"40px", fontWeight:"bolder", }}>
+    <div style={{ padding: "20px" }}>
+      <h1 style={{ textAlign: "center", fontSize: "2.3rem", marginBottom: "50px", }}>
         Artists
       </h1>
       <div
@@ -31,7 +30,6 @@ const Artists = () => {
           gridTemplateColumns: "repeat(3, 1fr)", // Three images per row
           gap: "30px",
           justifyItems: "center",
-          marginTop:"0px",
         }}
       >
         {employees.map((employee) => (
@@ -71,9 +69,10 @@ const Artists = () => {
                   left: "50%",
                   transform: "translate(-50%, -50%)",
                   color: "white",
-                  fontSize: "1.5rem",
+                  fontSize: "1.3rem",
+                  textTransform: "uppercase",
                   fontWeight: "bolder",
-                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.9)", // For better visibility on the image
+                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // For better visibility on the image
                   
                 }}
               >

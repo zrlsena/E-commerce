@@ -11,12 +11,16 @@ import NavBar from './components/Navbar';
 import EmployeeProfile from './pages/EmployeeProfile';
 import EmployeePage from './pages/Employee';
 import PrivateRoute from './PrivateRoute';
+import './a.css';
+import Details from './pages/Details';
+
 
 
 function App() {
   return (
     <BrowserRouter>
     <NavBar/>
+    <div style={{paddingInline:'180px',marginTop:"90px",}}>
       <Routes>
         <Route path='/register' element={<Signup />} />
         <Route path='/login' element={<Login />} />
@@ -24,6 +28,7 @@ function App() {
         <Route path='/admin' element={<AdminPage />} />
         <Route path='/products' element={<Products />} />
         <Route path='/artists' element={<Artists />} />
+        <Route path="/product/:id" element={<Details />} />
         <Route
           path="/employee"
           element={
@@ -41,7 +46,9 @@ function App() {
           }
         />
       </Routes>
+      </div>
     </BrowserRouter>
+
   );
 }
 

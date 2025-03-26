@@ -214,6 +214,18 @@ app.get("/employee/:id", async (req, res) => {
   }
 });
 
+// 🔥 Tek bir ürünü getirme (Details sayfası için)
+app.get("/products/:id", async (req, res) => {
+  try {
+    const product = await ProductModel.findById(req.params.id).populate("employeeId", "name");
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
 
 
 const PORT = process.env.PORT || 5000;
