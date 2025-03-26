@@ -10,6 +10,8 @@ import Artists from './pages/Artists';
 import NavBar from './components/Navbar';
 import EmployeeProfile from './pages/EmployeeProfile';
 import EmployeePage from './pages/Employee';
+import PrivateRoute from './PrivateRoute';
+
 
 function App() {
   return (
@@ -20,11 +22,24 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/home' element={<Home />} />
         <Route path='/admin' element={<AdminPage />} />
-        <Route path='/employee' element={<EmployeePage />} />
         <Route path='/products' element={<Products />} />
         <Route path='/artists' element={<Artists />} />
-        <Route path='/employee-profile' element={<EmployeeProfile />} />
-
+        <Route
+          path="/employee"
+          element={
+            <PrivateRoute>
+              <EmployeePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/employee-profile"
+          element={
+            <PrivateRoute>
+              <EmployeeProfile />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

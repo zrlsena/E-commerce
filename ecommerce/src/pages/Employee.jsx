@@ -9,8 +9,10 @@ const EmployeePage = () => {
   const [employee, setEmployee] = useState(null); // State to hold employee data
   const [form, setForm] = useState({ name: "", description: "", price: "", stock: "", image: "" });
   const [editingProduct, setEditingProduct] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    
     const fetchEmployeeData = async () => {
       const employeeId = localStorage.getItem("employeeId");
       try {
@@ -40,6 +42,7 @@ const EmployeePage = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const employeeId = localStorage.getItem("employeeId");
 
     try {
@@ -49,14 +52,18 @@ const EmployeePage = () => {
       });
       fetchProducts();
       setForm({ name: "", description: "", price: "", stock: "", image: "" });
+      
     } catch (error) {
       console.error("Error adding product:", error);
-    }
+    } setTimeout(() => {
+      window.location.href = window.location.href; // Sayfayı yeniden yükle
+    }, 0);
   };
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
     setForm(product);
+
   };
 
   const handleUpdateProduct = async (e) => {
@@ -66,35 +73,32 @@ const EmployeePage = () => {
       fetchProducts();
       setEditingProduct(null);
       setForm({ name: "", description: "", price: "", stock: "", image: "" });
+
     } catch (error) {
       console.error("Error updating product:", error);
-    }
+    }setTimeout(() => {
+      window.location.href = window.location.href; // Sayfayı yeniden yükle
+    }, 0);
   };
 
   const handleDeleteProduct = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/employee/delete-product/${id}`);
       fetchProducts();
+      
     } catch (error) {
       console.error("Error deleting product:", error);
-    }
+    }setTimeout(() => {
+      window.location.href = window.location.href; // Sayfayı yeniden yükle
+    }, 0);
   };
 
   return (
     <div className="container mt-5">
-      <Link
-                to="/employee-profile"
-                className="btn btn-default border w-100 bg-light rounded-0 tex-decoration-none"
-              >
-                profile
-              </Link>
-      {/* Employee Name Display */}
       <div className="mb-4">
-        <h3>Welcome </h3>
+        
       </div>
-
       <h2 className="text-center mb-4">Manage Products</h2>
-
       <div className="card p-4 shadow-sm">
         <h4 className="mb-3">{editingProduct ? "Edit Product" : "Add New Product"}</h4>
         <form onSubmit={editingProduct ? handleUpdateProduct : handleAddProduct}>
@@ -142,6 +146,7 @@ const EmployeePage = () => {
           </div>
         ))}
       </div>
+      
     </div>
   );
 };
