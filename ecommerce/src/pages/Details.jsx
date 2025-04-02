@@ -22,58 +22,61 @@ const Details = () => {
   if (!product) return <h2 className="text-center mt-5">Loading...</h2>;
 
   return (
-    <div className="container mt-5 p-5">
-      <div className="row g-5">
+<div className="mt-5 p-5 container" style={{ maxWidth: "1200px" }}>
+      <div className="row g-4 align-items-center ">
         {/* Sol Taraf - Ürün Resmi */}
-        <div className="col-md-6 text-center">
+        <div className="col-sm-6 text-center">
           <img
             src={product.image}
             alt={product.name}
             className="img-fluid"
-            style={{ maxWidth: "100%", borderRadius: "0px" }}
+            style={{
+              maxWidth: "100%",
+              minheight: "300px",
+              maxHeight: "500px",
+              borderRadius: "0",
+              objectFit: "cover",
+            }}
           />
         </div>
 
         {/* Sağ Taraf - Bilgiler */}
-        <div className="col-md-6">
-          <p className="text-uppercase text-muted mt-5" style={{fontSize:"16px", fontWeight:"bolder"}}>
+        <div className="col-sm-6 p-5">
+          <p className="text-uppercase text-muted mb-1" >
             {product.employeeId?.name || "Unknown"}
           </p>
-          <h4 className="fw-bold mt-2">{product.name}</h4>
-          <p className="text-muted mt-3" style={{fontSize:"16px", fontWeight:"bolder"}}>
+          <h4 className="fw-bold">{product.name}</h4>
+          <p className="text-muted mt-3">
             {new Intl.NumberFormat("en-US", {
               style: "currency",
               currency: "USD",
               minimumFractionDigits: 2,
             }).format(product.price)}
           </p>
-          <p style={{fontSize:"10px", }}>Tax included. Shipping calculated at checkout</p>
+          <p className="text-muted" style={{fontSize:"10px"}}>Tax included. Shipping calculated at checkout.</p>
 
-          {/* Butonu tam ortalamak için flex container ekledim */}
-          <div className="d-flex justify-content-center mt-3">
-            <button
-              className="btn"
-              style={{
-                width: "100%",  
-                backgroundColor: "#B22222", 
-                color: "white",
-                borderRadius: 0,
-                fontSize: "12px",
-                fontWeight: "bolder",
-                padding: "12px",
-                textTransform: "uppercase",
-              }}
-            >
-              Add to Cart
-            </button>
-          </div>
+          {/* Add to Cart Butonu */}
+          <button
+            className="btn w-100 p-2 mt-3 "
+            style={{
+              backgroundColor: "#B22222",
+              color: "white",
+              borderRadius: 0,
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              fontSize:"10px",
+              letterSpacing:"1.5px",
+            }}
+          >
+            Add to Cart
+          </button>
         </div>
       </div>
 
-      {/* Açıklama Kısmı */}
-      <div className="mt-5">
-        <h4>Description</h4>
-        <p>{product.description}</p>
+      {/* Açıklama Bölümü */}
+      <div className="mt-5 px-4">
+        <p className="fw-bold mt-5 pt-5" style={{fontSize:"12px",letterSpacing:"1.5px",}}>Description</p>
+        <p  style={{ fontSize: "11px",letterSpacing:"1.5px", }}>{product.description}</p>
       </div>
     </div>
   );

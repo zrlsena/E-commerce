@@ -1,3 +1,5 @@
+//employee edit
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
@@ -64,7 +66,7 @@ const EmployeeProfile = () => {
   };
 
   return (
-    <div className="container mt-3">
+    <div className="container mt-3 p-5" style={{ maxWidth: "1200px" }}>
       <Link to="/employee" style={{ 
             textDecoration: 'none', 
             display: 'flex', 

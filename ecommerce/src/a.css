@@ -5,6 +5,8 @@
   h1, h2, h3, h4, h5, h6 {
     text-transform: uppercase;
     font-family: "MyFont", sans-serif;
+    font-weight: bolder;
+    letter-spacing: 7px;
 
   }
   @font-face {
@@ -14,4 +16,55 @@
     font-style: normal;
   }
   
+  .artist-card {
+    position: relative; /* Konumlandırma için gerekli */
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* Kare yapmak için */
+    overflow: hidden;
+    border-radius: 0 !important; /* Keskin kenarlar için */
+    box-shadow: none; /* Yumuşak kenarlara sebep olan gölgeyi kaldırıyoruz */
+    transition: transform 0.5s ease; /* Hover geçişi */
+  }
   
+  .artist-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Resmin kapsama şekli */
+    filter: brightness(0.7); /* Resmi koyulaştırma */
+  }
+  
+  .artist-card .image-container {
+    border-radius: 0 !important; /* Burada da sıfırlıyoruz */
+  }
+  
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  .navbar-transparent {
+    background-color: transparent !important;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .navbar-solid {
+    background-color: white !important;
+    transition: background-color 0.3s ease-in-out;
+    border-color: black;
+    border-width: 1px;
+  }
+  
+  .navbar-transparent .nav-link,
+  .navbar-transparent .navbar-brand {
+    color: white !important;
+  }
+  
+  .navbar-solid .nav-link,
+  .navbar-solid .navbar-brand {
+    color: black !important;
+  }
+  
+/* Home Page'de sadece #carousel-section için padding ve margin kaldır */
+

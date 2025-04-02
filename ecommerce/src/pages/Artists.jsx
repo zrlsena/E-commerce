@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Container, Row, Col } from "react-bootstrap";
 
 const Artists = () => {
   const [employees, setEmployees] = useState([]);
@@ -20,69 +21,29 @@ const Artists = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1 style={{ textAlign: "center", fontSize: "2.3rem", marginBottom: "50px", }}>
-        Artists
-      </h1>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)", // Three images per row
-          gap: "30px",
-          justifyItems: "center",
-        }}
-      >
+    <Container className="mt-5 p-5 container" style={{ maxWidth: "1200px" }}>
+      <h1 className="text-center mb-5">Artists</h1>
+      <Row className="g-4" >
         {employees.map((employee) => (
-          <div
-            key={employee._id}
-            className="artist-card"
-            style={{
-              position: "relative", // To position the name over the image
-              width: "100%",
-              height: "0",
-              paddingBottom: "100%",
-              overflow: "hidden",
-              borderRadius: "0px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-              transition: "transform 0.5s ease", // Smooth transition on hover
-            }}
-          >
-            <Link to={`/${employee.name}`} style={{ textDecoration: "none" }}>
-              <img
-                src={employee.image}
-                alt={employee.name}
-                style={{
-                  position: "absolute", // Make the image fill the parent div
-                  top: "0",
-                  left: "0",
-                  width: "100%",
-                  height: "100%",
-                  filter: "brightness(0.7)",
-                  objectFit: "cover", // Ensures the image covers the whole container
-                  transition: "transform 0.5s ease", // Smooth transition for image growth
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  color: "white",
-                  fontSize: "1.3rem",
-                  textTransform: "uppercase",
-                  fontWeight: "bolder",
-                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // For better visibility on the image
-                  
-                }}
-              >
-                {employee.name}
+          <Col key={employee._id} xs={12} sm={6} md={4} lg={4} className="text-center" >
+            <Link to={`/${employee.name}`} className="text-decoration-none">
+              <div className="artist-card position-relative rounded overflow-hidden shadow-sm" >
+                <div className="image-container">
+                  <img
+                    src={employee.image}
+                    alt={employee.name}
+                    className="img-fluid"
+                  />
+                </div>
+                <div className="position-absolute top-50 start-50 translate-middle text-white fw-bold fs-5 text-uppercase text-shadow">
+                  {employee.name}
+                </div>
               </div>
             </Link>
-          </div>
+          </Col>
         ))}
-      </div>
-    </div>
+      </Row>
+    </Container>
   );
 };
 

@@ -94,7 +94,7 @@ const EmployeePage = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5 p-5"style={{ maxWidth: "1200px" }}>
       <div className="mb-4">
         
       </div>

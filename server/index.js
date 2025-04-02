@@ -5,6 +5,7 @@ require("dotenv").config();
 const CustomerModel = require("./models/Customer");
 const EmployeeModel = require("./models/Employee");
 const ProductModel = require("./models/Product");
+const SlideModel = require("./models/Slide");
 
 const app = express();
 app.use(express.json());
@@ -170,12 +171,20 @@ app.delete("/employee/delete-product/:id", async (req, res) => {
 // 🔥 Tüm ürünleri listeleme
 app.get("/products", async (req, res) => {
   try {
-    const products = await ProductModel.find().populate("employeeId", "name email");
+    const { employeeId } = req.query;
+
+    let query = {}; // Eğer employeeId varsa filtre uygula
+    if (employeeId) {
+      query.employeeId = employeeId;
+    }
+
+    const products = await ProductModel.find(query).populate("employeeId", "name email");
     res.json(products);
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }
 });
+
 
 // 🔥 Employee: Update own profile information
 app.put("/employee/update-profile/:id", async (req, res) => {
@@ -222,6 +231,48 @@ app.get("/products/:id", async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
     res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+app.get("/employee/name/:name", async (req, res) => {
+  try {
+    const employee = await EmployeeModel.findOne({ name: req.params.name });
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    res.json(employee);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+app.post("/admin/add-slide", async (req, res) => {
+  const { imageUrl, title, description, buttonText, buttonLink  } = req.body;
+
+  if (!imageUrl) {
+    return res.status(400).json({ message: "Image URL is required" });
+  }
+
+  try {
+    const newSlide = await SlideModel.create({ imageUrl, title, description, buttonText, buttonLink  });
+    res.status(201).json(newSlide);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+app.get("/slides", async (req, res) => {
+  try {
+    const slides = await SlideModel.find().sort({ createdAt: -1 });
+    res.json(slides);
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+app.delete("/admin/delete-slide/:id", async (req, res) => {
+  try {
+    await SlideModel.findByIdAndDelete(req.params.id);
+    res.json({ message: "Slide deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err });
   }

@@ -10,49 +10,60 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("http://localhost:5000/products");
-        setProducts(res.data);
+        const sortedProducts = res.data.sort((a, b) => {
+          const nameA = a.employeeId?.name?.toLowerCase() || "";
+          const nameB = b.employeeId?.name?.toLowerCase() || "";
+          return nameA.localeCompare(nameB);
+        });
+        setProducts(sortedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-
+  
     fetchProducts();
   }, []);
+  
 
   return (
-    <div className="container mt-5 ">
-      <h1 className="text-center mb-5" style={{ fontSize: "2.3rem" }}>All artworks</h1>
-      
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-1">
+    <div className=" p-5 mt-5 container " style={{ maxWidth: "1200px" }}>
+      <h1 className="text-center mb-5" >
+        All Artworks
+      </h1>
+
+      {/* ✅ Responsive Grid */}
+      <div className="row row-cols-2 row-cols-sm-2 row-cols-md-2 row-cols-lg-5 g-2">
         {products.map((product) => (
-          <div key={product._id} className="col d-flex justify-content-center">
-            <Link to={`/product/${product._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-              <div className="p-1 mb-4 text-center" style={{ width: "100%" }}>
+          <div key={product._id} className="col">
+            <Link to={`/product/${product._id}`} className="text-decoration-none text-dark">
+              <div className="card border-0 shadow-none mb-5">
                 {product.image && (
                   <img
                     src={product.image}
-                    className="img-fluid"
+                    className="w-100"
                     alt={product.name}
                     style={{
-                      width: "100%",
-                      height: "auto",
-                      borderRadius: "0px",
+                      objectFit: "cover",
+                      borderRadius: "0",
+                      marginTop: "0",
                     }}
                   />
                 )}
-                <div className="mt-2 p-2">
-                  <h5 style={{ fontWeight: "bolder", textTransform: "uppercase", fontSize: "13px", margin: "0" }}>
-                    <small>{product.employeeId?.name || "Unknown"}</small>
-                  </h5>
-                  <p style={{ textTransform: "uppercase", fontSize: "11px", margin: "0" }}>
+                <div className="card-body text-center p-2">
+                  <p className="fw-bolder text-uppercase mb-1" style={{ fontSize: "9px" }}>
+                    {product.employeeId?.name || "Unknown"}
+                  </p>
+                  <p className="fw-bolder text-uppercase mb-1 " style={{ fontSize: "11px" }}>
                     {product.name}
                   </p>
-                  <p className="text-muted" style={{ fontSize: "11px", margin: "0" }}>
-                    {new Intl.NumberFormat("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits: 2,
-                    }).format(product.price)}
+                  <p className=" mb-0" style={{ fontSize: "10px" }}>
+                    {product.price
+                      ? new Intl.NumberFormat("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                          minimumFractionDigits: 2,
+                        }).format(product.price)
+                      : "N/A"}
                   </p>
                 </div>
               </div>
