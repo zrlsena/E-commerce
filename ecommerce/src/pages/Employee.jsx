@@ -24,9 +24,12 @@ const EmployeePage = () => {
     };
 
     const fetchProducts = async () => {
+      const employeeId = localStorage.getItem("employeeId"); // employeeId çek
       try {
         const res = await axios.get("http://localhost:5000/products");
-        setProducts(res.data);
+        // Yalnızca giriş yapan employee'e ait ürünleri filtrele
+        const filtered = res.data.filter(p => p.employeeId?._id === employeeId);
+        setProducts(filtered);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -35,7 +38,9 @@ const EmployeePage = () => {
     fetchEmployeeData();
     fetchProducts();
   }, []);
-
+  
+  
+  
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
